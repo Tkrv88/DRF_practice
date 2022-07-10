@@ -18,3 +18,8 @@ class NewsViewSet(viewsets.ModelViewSet):
 class TypesViewSet(viewsets.ModelViewSet):
     queryset = Type.objects.all()
     serializer_class = TypeSerializer
+
+    @action(methods=['get'], detail=True)
+    def news(self, request, pk=None):
+        news = News.objects.filter(type_id=pk)
+        return Response({'News for this type': [n.name for n in news]})
