@@ -1,18 +1,21 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .serializers import *
 
 
-class NewsViewSet(viewsets.ModelViewSet):
+class NewsViewSet(mixins.CreateModelMixin,
+                  mixins.RetrieveModelMixin,
+                  mixins.UpdateModelMixin,
+                  mixins.DestroyModelMixin,
+                  viewsets.GenericViewSet):
     queryset = News.objects.all()
     serializer_class = NewsSerializer
 
-    @action(methods=['get'], detail=False)
-    def type(self, request):
-        types = Type.objects.all()
-        return Response({'type': [t.name for t in types]})
+    def get(self, request):
+        n = News.objects.all()
+        return Response({'news': NewsSerializerList(n, many=True).data})
 
 
 class TypesViewSet(viewsets.ModelViewSet):
