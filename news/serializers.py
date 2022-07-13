@@ -5,24 +5,12 @@ from .models import *
 class TypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Type
-        fields = "__all__"
+        fields = ("name", "color")
 
 
 class NewsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = News
-        fields = "__all__"
-
-
-class ExtraSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Type
-        fields = ('name', 'color')
-
-
-class NewsSerializerList(serializers.ModelSerializer):
-    type = ExtraSerializer()
+    type = TypeSerializer()
 
     class Meta:
         model = News
-        fields = ('name', 'short_description', 'type')
+        fields = ("name", "short_description", "type")
